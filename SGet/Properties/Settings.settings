@@ -65,5 +65,8 @@
     <Setting Name="ProxyPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ApiPort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">6570</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

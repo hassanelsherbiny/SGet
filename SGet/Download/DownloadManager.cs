@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
+using System.Net;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace SGet
 {
@@ -8,7 +12,7 @@ namespace SGet
     {
         // Class instance, used to access non-static members
         private static DownloadManager instance = new DownloadManager();
-
+        public static MainWindow mainWindow;
         public static DownloadManager Instance
         {
             get
@@ -116,7 +120,61 @@ namespace SGet
 
             return String.Format("{0}:{1}:{2}", hours, minutes, seconds);
         }
+        public static string Add(AddFileDto dto)
+        {
+            WebDownloadClient download = new WebDownloadClient(dto.Url.Trim());
 
+            download.FileName = dto.FileName.Trim();
+
+            // Register WebDownloadClient events
+            download.DownloadProgressChanged += download.DownloadProgressChangedHandler;
+            download.DownloadCompleted += download.DownloadCompletedHandler;
+            download.PropertyChanged += mainWindow.PropertyChangedHandler;
+            download.StatusChanged += mainWindow.StatusChangedHandler;
+            download.DownloadCompleted += mainWindow.DownloadCompletedHandler;
+
+            // Create path to temporary file
+            if (!Directory.Exists(dto.SaveFolder))
+            {
+                Directory.CreateDirectory(dto.SaveFolder);
+            }
+            string filePath = Path.Combine(dto.SaveFolder, download.FileName);
+            string tempPath = filePath + ".tmp";
+            if (File.Exists(filePath))
+            {
+                return "There is already a file with the same name, please change the file name or download folder.";
+            }
+            // Check if there is already an ongoing download on that path
+            if (File.Exists(tempPath))
+            {
+                return "There is already a download in progress at the specified path.";
+            }
+            // Set username and password if HTTP authentication is required
+            if (dto.ServerLogin && (dto.UserName.Trim().Length > 0) && (dto.Password.Trim().Length > 0))
+            {
+                download.ServerLogin = new NetworkCredential(dto.UserName.Trim(), dto.Password.Trim());
+            }
+
+            // Check the URL
+            download.CheckUrl();
+            //if (download.HasError)
+            //    return;
+
+            download.TempDownloadPath = tempPath;
+
+            download.AddedOn = DateTime.UtcNow;
+            download.CompletedOn = DateTime.MinValue;
+            download.OpenFileOnCompletion = dto.OpenFileOnCompletion;
+
+            // Add the download to the downloads list
+            Application.Current.Dispatcher.Invoke(() => Instance.DownloadsList.Add(download));
+            // Start downloading the file
+            if (dto.StartImmediately)
+                download.Start();
+            else
+                download.Status = DownloadStatus.Paused;
+            return "";
+        }
         #endregion
     }
 }

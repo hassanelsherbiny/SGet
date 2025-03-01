@@ -51,6 +51,14 @@
                     <Label Content="Password:" Height="Auto" HorizontalAlignment="Left" Margin="36,169,0,0" Name="lblPassword" VerticalAlignment="Top" Padding="5,0" />
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Api" Name="tiApi">
+                <Grid>
+                    <Label Content="The port used by extension and external apps" Height="Auto" HorizontalAlignment="Left" Margin="0,0,0,0" Name="lblApiDesc" VerticalAlignment="Top" Padding="5,0" />
+                    <Label Content="Port:" Height="Auto" HorizontalAlignment="Left" Margin="41,23,0,0" Name="lblApiPort" VerticalAlignment="Top" Padding="5,0" />
+                    <xctk:IntegerUpDown BorderThickness="1" CultureInfo="(Default)" Height="23" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Increment="1" Margin="80,19,0,0" Maximum="65535" Minimum="0" Name="intApiPort" Text="" TextAlignment="Left" VerticalAlignment="Top" Width="65" Value="6570" />
+                </Grid>
+            </TabItem>
         </TabControl>
         <Button Content="Cancel" Margin="300,290,0,0" Name="btnCancel" IsCancel="True" IsDefault="False" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" />
         <Button Content="Restore Defaults" Margin="15,290,0,0" Name="btnRestore" HorizontalAlignment="Left" Width="105" Height="23" VerticalAlignment="Top" Click="btnRestore_Click" />

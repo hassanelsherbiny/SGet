@@ -9,6 +9,8 @@ namespace SGet
     public partial class App : Application, ISingleInstanceApp
     {
         private const string Unique = "SGet";
+        private static LocalApiServer _apiServer;
+
 
         #region Methods
 
@@ -60,11 +62,19 @@ namespace SGet
             {
                 var application = new App();
 
+                _apiServer = new LocalApiServer();
+                _apiServer.Start();
                 application.InitializeComponent();
                 application.Run();
 
                 SingleInstance<App>.Cleanup();
             }
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _apiServer.Stop();
+            base.OnExit(e);
         }
     }
 }

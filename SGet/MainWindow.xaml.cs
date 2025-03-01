@@ -108,6 +108,7 @@ namespace SGet
             }
 
             trayExit = false;
+            DownloadManager.mainWindow = this;
         }
 
         #endregion
@@ -734,7 +735,7 @@ namespace SGet
             }
         }
 
-        private void cmStartAll_Click(object sender, RoutedEventArgs e)
+        public void cmStartAll_Click(object sender, RoutedEventArgs e)
         {
             if (downloadsGrid.Items.Count > 0)
             {

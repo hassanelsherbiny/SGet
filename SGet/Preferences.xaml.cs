@@ -64,6 +64,7 @@ namespace SGet
             intProxyPort.Value = Settings.Default.ProxyPort;
             tbProxyUsername.Text = Settings.Default.ProxyUsername;
             tbProxyPassword.Password = Settings.Default.ProxyPassword;
+            intApiPort.Value = Settings.Default.ApiPort;
         }
 
         #endregion
@@ -158,6 +159,7 @@ namespace SGet
             Settings.Default.ProxyPort = intProxyPort.Value.Value;
             Settings.Default.ProxyUsername = tbProxyUsername.Text.Trim();
             Settings.Default.ProxyPassword = tbProxyPassword.Password.Trim();
+            Settings.Default.ApiPort = intApiPort.Value.Value;
 
             // Save settings
             Settings.Default.Save();
